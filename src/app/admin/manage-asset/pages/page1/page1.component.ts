@@ -22,7 +22,6 @@ export class Page1Component implements OnInit {
     'Ariyalur': ['none', 'Andimadam', 'Ariyalur', 'Sendurai', 'Udayarpalayam'],
     'Chennai': ['none', 'Alandur', 'Ambattur', 'Aminjikarai', 'Ayanavaram', 'Egmore', 'Guindy', 'Madhavaram', 'Maduravoyal', 'Mambalam', 'Mylapore', 'Perambur', 'Purasawalkam', 'Sholinganallur', 'Thiruvottiyur', 'Tondiarpet', 'Velachery'],
     'Madurai': ['none', 'Kalligudi', 'Madurai East', 'Madurai North', 'Madurai(South)', 'Madurai West', 'Melur', 'Peraiyur', 'Thirupparankundram', 'Tirumangalam', 'Usilampatti', 'Vadipatti'],
-    // Add other districts with taluks
   };
 
 
@@ -42,7 +41,6 @@ export class Page1Component implements OnInit {
     this.form.addControl('selectedDistrict', this.fb.control('', Validators.required));
     this.form.addControl('selectedTaluk', this.fb.control('', Validators.required));
 
-    // Set default district and taluk
     this.form.get('selectedDistrict')?.setValue(this.districts[0]);
     this.form.get('selectedTaluk')?.setValue(this.taluks[this.districts[0]][0]);
   }

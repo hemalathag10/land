@@ -14,7 +14,7 @@ div {
     margin-left:100px;
   }
   h2 {
-    color: #fff; /* White text for heading */
+    color: #fff!important; /* White text for heading */
   }
   
   form {

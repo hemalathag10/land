@@ -12,26 +12,47 @@ import { catchError, switchMap, map } from 'rxjs/operators';
 export class AssetService {
   private baseUrl = 'http://localhost:5984/project'; 
   private credentials = 'admin:admin'; 
+  CouchURL: string ='https://192.168.57.185:5984/land'; 
+  databaseName: string = 'land';
+  couchUserName: string = 'd_couchdb';
+  couchPassword: string = 'Welcome#2';
+
+
 
   constructor(private http: HttpClient) {}
+  
+  createdoc(document: any):any {
+
+
+    return this.http.post(`${this.CouchURL}/_bulk_docs`, document,   {
+      headers: {
+        'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
+      }
+     });
+
+}
+
+getAssets(document:any):Observable<any>{
+  const url=`${this.CouchURL}/_design/landInfoSearch/_search/landInfoSearch`
+  return this.http.post(url, document, {
+    headers: {
+      'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
+    }
+  })
+}
 
   createAsset(formData: any, documentId: string): Observable<any> {
     const url = `${this.baseUrl}/${documentId}`;
   
-    // Check if the document exists
     return this.http.get(url, { headers: this.getHeaders() }).pipe(
       switchMap((existingData: any) => {
-        // Get the latest _rev value
         const latestRev = existingData._rev;
   
-        // Append new data to the asset array
         existingData.asset.push(formData);
   
-        // Update the existing document
         return this.http.put(`${url}?rev=${latestRev}`, existingData, { headers: this.getHeaders() });
       }),
       catchError((error: any) => {
-        // If the document doesn't exist, create a new one
         if (error.status === 404) {
           const newDocument = {
             asset: [formData],
@@ -132,14 +153,33 @@ console.log(headers)
     return this.http.get<any>(`${this.baseUrl}/doc_asset`, { headers });
   }
 
-  getFeedback(): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Basic ' + btoa(this.credentials)
-    });
-console.log(headers)
-    return this.http.get<any>(`${this.baseUrl}/feedback`, { headers });
-  }
+ 
+getOwnersInfo(){
+  const url = `${this.CouchURL}/_design/view/_view/landSearch`
+  return this.http.get(url, {
+    headers: {
+      'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
+    }
+  })
+}
+
+getOwners(id:any){
+  const url = `${this.CouchURL}/_design/view/_view/ownersInfo?key="${id}"`
+  return this.http.get(url, {
+    headers: {
+      'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
+    }
+  })
+}
+
+getLocation(landId:any){
+  const url = `${this.CouchURL}/_design/view/_view/locationSearch?key="${landId}"`
+  return this.http.get(url, {
+    headers: {
+      'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
+    }
+  })
+}
 
 
   getAllUsers(): Observable<any> {

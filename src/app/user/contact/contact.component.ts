@@ -1,6 +1,7 @@
 import { AuthService } from 'src/app/services/auth.service';
 import { NgForm } from '@angular/forms';
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-contact',
@@ -15,6 +16,7 @@ export class contactComponent {
       }
   
     formData = {
+      
       name: '',
       email: '',
       phone: '',
@@ -28,15 +30,20 @@ export class contactComponent {
   
       if (this.validateForm()) {
         const feedbackData = {
+          _id: 'feedback_2_'+uuidv4() ,
+          data:{
           name: this.formData.name,
           email: this.formData.email,
           phone: this.formData.phone,
-          feedback: this.formData.feedback
+          feedback: this.formData.feedback,
+          createdOn:new Date().toLocaleDateString('en-GB'),
+          type:"feedback"
+          }
         };
   
-        this.authService.submitFeedback(feedbackData)
+        this.authService.userFeedback(feedbackData)
           .subscribe(
-            (response) => {
+            (response:any) => {
               console.log('Feedback submitted successfully:', response);
               this.successMessage = 'Feedback submitted successfully';
 
@@ -44,7 +51,7 @@ export class contactComponent {
               // Optionally, you can reset the form after successful submission
               this.resetForm();
             },
-            (error) => {
+            (error:any) => {
               console.error('Error submitting feedback:', error);
             }
           );

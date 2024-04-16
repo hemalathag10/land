@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpHeaders ,HttpErrorResponse} from '@angular/common/http';
 import { DialogService } from 'src/app/services/dialog.service';
 import * as CryptoJS from 'crypto-js';
-
-
+import { AuthService } from 'src/app/services/auth.service';
 import { MatDialogRef} from '@angular/material/dialog';
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -27,7 +27,8 @@ export class RegistrationComponent {
   errorMessage: string = '';
   errorPasswordMessage: string = '';
 
-  constructor(private fb: FormBuilder, private http: HttpClient,private dialogService: DialogService, public dialogRef: MatDialogRef<RegistrationComponent> ) {
+  constructor(private fb: FormBuilder, private http: HttpClient,
+    private authService:AuthService,private dialogService: DialogService, public dialogRef: MatDialogRef<RegistrationComponent> ) {
     this.myForm = this.fb.group({
       emailId: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -42,55 +43,31 @@ export class RegistrationComponent {
   onSubmit() {
     this.successMessage = '';
     this.errorMessage = '';
-  
-    if (this.myForm.valid) {
-      const formData = this.myForm.value as User;
-  
-      const encryptedPassword = CryptoJS.AES.encrypt(formData.password, 'secret key').toString();
-  
-      formData.password = encryptedPassword;
-    
-      formData.createdAt = new Date();
-  
-      const headers = new HttpHeaders({
-        'Authorization': 'Basic ' + btoa('admin:admin'),
-        'Content-Type': 'application/json',
-      });
-  
-      this.http.get('http://localhost:5984/project/form', { headers })
-        .subscribe(
-          (existingFormData: any) => {
-            const usersArray: User[] = existingFormData.user || [];
-              console.log(formData)
-            const emailExists = usersArray.some((user: User) => user.emailId === formData.emailId);
-  
-            if (emailExists) {
-              console.log(emailExists)
-            } else {
-              usersArray.push(formData);
-  
-              existingFormData.user = usersArray;
-  
-              this.http.put('http://localhost:5984/project/form', existingFormData, { headers })
-                .subscribe(
-                  response => {
-                    this.successMessage = 'successfully registered';
-                    this.dialogRef.close();
-                    console.log('Data stored successfully:', response);
-                  },
-                  (error: HttpErrorResponse) => {
-                    this.errorMessage = 'Error storing data.';
-                    console.error('Error storing data:', error);
-                  }
-                );
-            }
-          },
-          (error: HttpErrorResponse) => {
-            this.errorMessage = 'Error fetching existing data.';
-            console.error('Error fetching existing data:', error);
-          }
-        );
+    console.log("uuid",uuidv4())
+    const couchFormat = {
+      _id: 'user_2_'+uuidv4() ,
+      data: {
+        emailId: this.myForm.value.emailId,
+        password: CryptoJS.AES.encrypt(this.myForm.value.password, 'secret key').toString(),
+        createdOn:new Date().toLocaleDateString('en-GB'),
+        type: "user"
+      }
     }
+    console.log("couchformat",couchFormat)
+    if (this.myForm.valid) {
+
+    this.authService.userRegistration(couchFormat).subscribe((response:any )=> {
+      this.successMessage = 'successfully registered';
+      this.dialogRef.close();
+      console.log('Data stored successfully:', response);
+    },
+    (error: HttpErrorResponse) => {
+      this.errorMessage = 'Error storing data.';
+      console.error('Error storing data:', error);
+    });
+  }
+
+    
   }
   
   checkEmailExists() {

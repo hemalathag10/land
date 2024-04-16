@@ -83,7 +83,6 @@ export class Page2Component  {
       south: [''],
       east: [''],
       west: [''],
-      // Add more form controls for other owner details here
     }));
   }
 
@@ -92,11 +91,7 @@ export class Page2Component  {
   }
 
   submitForm() {
-    // Process and store form data
-    // This is where you would save the data to your backend or perform further processing
-
-    // For demonstration purposes, assuming owners have 'name' property
-    // You should modify this according to your actual data structure
+  
       this.ownershipHistory = this.form.value.owners.map((owner: any) => {
         const ownershipFrom = new Date(this.form.value.ownershipDurationFrom);
         const ownershipTo = new Date(this.form.value.ownershipDurationTo);

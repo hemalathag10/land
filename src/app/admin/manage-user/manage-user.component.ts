@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AssetService } from 'src/app/services/asset.service'; // Import the correct path
+import { AuthService } from 'src/app/services/auth.service'; // Import the correct path
 
 @Component({
   selector: 'app-manage-user',
@@ -11,7 +11,7 @@ export class ManageUserComponent implements OnInit {
   columnDefinitions: any[] = [];
   gridOptions: any = {};
   dataset: any[] = [];
-  constructor(private assetService: AssetService) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.fetchUsers();
@@ -20,9 +20,9 @@ export class ManageUserComponent implements OnInit {
   
 
   fetchUsers(): void {
-    this.assetService.getAllUsers().subscribe(
+    this.authService.getAllUsers().subscribe(
       (data: any) => {
-        this.users = data.user;
+        this.users = data.rows;
         this.columnDefinitions = [
           { id: 'id', name: 'S.No', field: 'id', sortable: true, maxWidth: 80 },
     
@@ -36,9 +36,9 @@ export class ManageUserComponent implements OnInit {
         // Populate dataset dynamically
         this.dataset = this.users.map((registration, index) => ({
           id: index + 1,
-          email: registration.emailId,
-          createdAt: this.formatDate(registration.createdAt, false),
-          lastLogin: this.formatDate(registration.lastLogin, true)
+          email: registration.value.data.emailId,
+          createdAt: this.formatDate(registration.value.data.createdOn, false)
+          // lastLogin: this.formatDate(registration.value.data.lastLogin, true)
         }));
         
        

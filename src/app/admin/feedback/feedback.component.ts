@@ -1,6 +1,6 @@
 
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AssetService } from 'src/app/services/asset.service';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-feedback',
   templateUrl: './feedback.component.html',
@@ -12,12 +12,11 @@ export class FeedbackComponent implements OnInit {
   columnDefinitions: any[] = [];
   gridOptions: any = {};
   dataset: any[] = [];
-
-  constructor(private assetService: AssetService,) {}
+  constructor(private authService: AuthService,) {}
 
   ngOnInit(): void {
-    this.assetService.getFeedback().subscribe((data) => {
-      this.feedbackData = data.messages;
+    this.authService.getFeedback().subscribe((data:any) => {
+      this.feedbackData = data.rows;
       this.columnDefinitions = [
         { id: 'id', name: 'S.No', field: 'id', sortable: true, maxWidth: 80 },
         { id: 'name', name: 'Name', field: 'name', sortable: true,maxWidth: 130 },
@@ -30,9 +29,9 @@ export class FeedbackComponent implements OnInit {
       // Populate dataset dynamically
       this.dataset = this.feedbackData.map((registration, index) => ({
         id: index + 1,
-        name:registration.name,
-        email: registration.email,
-        feedback: registration.feedback
+        name:registration.value.data.name,
+        email: registration.value.data.email,
+        feedback: registration.value.data.feedback
       }));
       
      

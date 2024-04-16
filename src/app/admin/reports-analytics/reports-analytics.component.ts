@@ -33,7 +33,7 @@ export class ReportsAnalyticsComponent implements OnInit {
   filteredTaluk!: Observable<string[]>;
   ta:string[]=["che","mdu"]
   wards: { [key: number]: WardData[] } = {};
-
+doc:any;
   onDistrictSearch() {
     this.filteredDistricts = this.filterItems(this.districts, this.searchDistrict);
   }
@@ -55,6 +55,7 @@ export class ReportsAnalyticsComponent implements OnInit {
     constructor(private assetService: AssetService) { }
 
   ngOnInit() {
+    
     console.log("taluks",this.taluks)
 
     this.fetchAssetData();
@@ -80,6 +81,9 @@ export class ReportsAnalyticsComponent implements OnInit {
         this.assetData = data;
         this.drawDoughnutChart();
         this.drawPieChart();
+        
+      
+        
       },
       (error) => {
         console.error('Error fetching asset data:', error);

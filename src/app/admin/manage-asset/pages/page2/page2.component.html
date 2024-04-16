@@ -10,7 +10,7 @@
 
     <!-- Details for multiple owners -->
     <label for="numOwners">Number of Owners:</label>
-    <input type="number" id="numOwners" formControlName="numOwners" required>
+    <input type="number" id="numOwners" formControlName="numOwners" required [min]="0">
 
     <!-- Add button to dynamically add owners -->
     <button type="button" (click)="addOwners()">Add Owners</button>

@@ -17,6 +17,10 @@ export class AuthService {
 
   private apiUrl = 'http://localhost:5984/project'; 
   private baseUrl = 'http://localhost:5984/project/form'; 
+  CouchURL: string ='https://192.168.57.185:5984/land'; 
+  databaseName: string = 'land';
+  couchUserName: string = 'd_couchdb';
+  couchPassword: string = 'Welcome#2';
 
 
   private headers = new HttpHeaders({
@@ -25,56 +29,41 @@ export class AuthService {
   });
 
   constructor(private http: HttpClient) {
-   
+  
   }
 
+getFeedback(){
+  const url = `${this.CouchURL}/_design/view/_view/feedbackSearch`
+  return this.http.get(url, {
+    headers: {
+      'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
+    }
+  })
 
-  login(emailId: string, password: string): Observable<any> {
-    const url = `${this.apiUrl}/form`;
-  
-    return this.http.get(url, { headers: this.headers }).pipe(
-      switchMap((userData: any) => {
-        if (!userData || !userData.user) {
-          return throwError(()=>'Invalid user data');
-        }
-  
-        const user = userData.user.find((u: any) => u.emailId === emailId);
-  
-        if (!user) {
-          return throwError(()=>'User not found');
-        }
-  
-        try {
-          console.log("pass",user.password)
-          const decryptedPassword = CryptoJS.AES.decrypt(user.password, 'secret key').toString(CryptoJS.enc.Utf8);
-  
-          console.log('Decrypted password:', decryptedPassword);
+}
 
-          if (decryptedPassword === password) {
-            user.lastLogin = new Date().toISOString();
-            this.isLoggedIn = true;
+getAllUsers(){
+  const url = `${this.CouchURL}/_design/view/_view/userSearch`
+  return this.http.get(url, {
+    headers: {
+      'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
+    }
+  })
+}
 
-            return this.http.put(url, userData, { headers: this.headers }).pipe(
-              switchMap(() => {
 
-                return of({ success: true, user });
-              })
-            );
-          } else {
-            return throwError(()=>'Password mismatch');
-          }
-        } catch (error) {
-          console.error('Error during password decryption:', error);
-          return throwError(()=>'Decryption error');
-        }
-      }),
-      catchError((error: any) => {
-        console.error('Error during login:', error);
-        return throwError(()=>'Login failed: ' + error.message);
-      })
-    );
-  }
-  
+setIsLogin(value: boolean) {
+  this.isLoggedIn = value;
+}
+  userLogin(emailId: string,password:string) {
+    const url = `${this.CouchURL}/_design/view/_view/emailIdSearch?key="${emailId}"`
+    return this.http.get(url, {
+      headers: {
+        'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
+      }
+    })}
+
+
   isUserLoggedIn(): boolean {
     return this.isLoggedIn;
   }
@@ -121,7 +110,16 @@ export class AuthService {
     this.isAdminLoggedIn = false;
     return this.isAdminLoggedIn
   }
+  userFeedback(document: any):any {
 
+
+    return this.http.post(this.CouchURL, document,   {
+      headers: {
+        'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
+      }
+     });
+
+}
   submitFeedback(feedbackData: any): Observable<any> {
     const url = `${this.apiUrl}/feedback`; 
     console.log("feed",feedbackData)
@@ -158,6 +156,18 @@ export class AuthService {
         throw error;
       })
     );
+  }
+
+
+  userRegistration(document: any):any {
+
+
+        return this.http.post(`${this.CouchURL}`, document,   {
+          headers: {
+            'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
+          }
+         });
+    
   }
 
 }

@@ -33,16 +33,20 @@ export class QrCodeScannerComponent implements OnInit {
 
         this.isCodeProcessed = true;
 
-        if (this.htmlScanner) {
-          this.htmlScanner.stop();
-        }
-
+        
         this.dialogRef.close();
       }
     };
+    
 
     this.htmlScanner = new Html5QrcodeScanner('my-qr-reader', { fps: 10, qrbos: 250 });
     this.htmlScanner.render(onScanSuccess);
+    Html5QrcodeScanner.stop().then((ignore:any) => {
+      console.log("stopped",ignore)
+    }).catch((err:any) => {
+      console.log(err)
+    });
+
   }
 
   closeScanner(): void {
