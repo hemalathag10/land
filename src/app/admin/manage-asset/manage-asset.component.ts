@@ -51,8 +51,9 @@ export class ManageAssetComponent implements OnInit {
   fieldValueString:any;
   assets:any[]=[]
   assetDoc:any[]=[]
-  ownersInfo:any={}
-  location:any={}
+  ownersArray:any=[]
+  location:any={};
+  format:any[]=[]
   constructor(private dialog: MatDialog, private fb: FormBuilder, private assetService: AssetService,private elementRef: ElementRef) {
     this.assetForm = this.fb.group({
       landArea: [''],
@@ -90,38 +91,72 @@ export class ManageAssetComponent implements OnInit {
  }
   
 
+ callOwnersInfoService(landId:string){
+  this.ownersArray=[]
+  console.log("iii",landId)
+  let id:string;
+  this.assetService.getOwners(landId).subscribe((ownersInfo:any)=>{
+    ownersInfo.rows.map((item:any)=>{
+      
+      id=item.id
+      console.log("ownerr",item,landId,item.value.data.land)
+      this.assetService.getTransactionInfo(id).subscribe((info:any)=>{
+        console.log("trans",info.rows[0].value)
+
+        
+      this.ownersArray.push({
+          owners:item.value.data,
+          transaction:info.rows[0].value.data
+        
+      }
+      )
+      console.log("array",this.ownersArray)
+      })
+    
+
+    })
+
+   
+  })
+
+ }
+
   fetchAssets() {
     console.log('Fetching Assets...');
 
     this.assetService.getOwnersInfo().subscribe((allLand:any)=>{
       this.assets=allLand.rows
+      console.log(allLand.rows);
+      
     
 
       console.log("RESPONSE :",this.assets,allLand,allLand.rows[0].value.data.ownersInfo)
       this.assets.map((land,index)=>{
         console.log(land)
-        let id=land.value.data.ownersInfo
         let landId=land.value._id
-        this.assetService.getOwners(id).subscribe((ownersInfo:any)=>{
-          console.log("owner",this.ownersInfo)
+        
         
         this.assetService.getLocation(landId).subscribe((location:any)=>{
           console.log("loc",this.location)
+          location.rows[0].value.data.barcode=land.value.data.barcode,
+          location.rows[0].value.data.id=landId
+
           this.assetDoc.push(
             {
-              barcode:land.value.data.barcode,
               location: location.rows[0].value.data,
-              ownersInfo: ownersInfo.rows[0].value.data
               
             }
+
           )
       console.log("DOC",this.assetDoc)
+      this.dataTable()
+      this.lengthFunction()
+
           
         })
        
-        this.lengthfunction()
 
-      })
+      
      
        
       })
@@ -172,7 +207,8 @@ export class ManageAssetComponent implements OnInit {
         id: 'action', name: 'Actions', field: 'action', sortable: false, maxWidth: 110,
         formatter: updateFormatter, onCellClick: (event:any,row:any) => {
           if (event) {
-            this.showAddNewForm(this.page1Data[row.row][0])
+
+            this.showAddNewForm(this.assetDoc[row.row].location)
           }
         }
         
@@ -181,8 +217,10 @@ export class ManageAssetComponent implements OnInit {
         id: 'ownership', name: 'Ownership', field: 'ownership', sortable: false, maxWidth: 110,
         formatter: viewFormatter, onCellClick: (event:any,row:any) => {
           if (event) {
-            
-            this.showOwnersDetailsDialog(this.page1Data[row.row])
+            console.log("table",this.page1Data, this.assetDoc,this.assetDoc[row.row].location)
+            this.callOwnersInfoService(this.assetDoc[row.row].location.land)
+            console.log("dialog",this.ownersArray)
+            this.showOwnersDetailsDialog(this.ownersArray)
           }
         }
         
@@ -257,7 +295,7 @@ LandUseType: registration ? registration.location.landUseType : "",
         
       });
     } 
-    this.page1Data=this.filteredDataset
+    this.page1Data=this.assetDoc
     this.dataTable()
     console.log("aa",this.filteredDataset)
   }
@@ -269,7 +307,7 @@ LandUseType: registration ? registration.location.landUseType : "",
       width: '600px',
       height:'400px',
      
-      data: assetArray[0],
+      data: assetArray,
       
     });
   
@@ -292,23 +330,20 @@ LandUseType: registration ? registration.location.landUseType : "",
     });
   }
 
-lengthfunction(){
-  this.assetService.getAllAssets().subscribe(
-    (response: any) => {
-      this.page1Data = response.asset || [];
-      console.log("page",this.page1Data,this.assetDoc.length,this.assetDoc)
-      this.assetDoc.map((v,i)=>{
-        console.log("value",v)
-      })
-      
-      this.dataTable()
+  lengthFunction(){
+    console.log('Fetching Assets...');
+    this.assetService.getAllAssets().subscribe(
+      (response: any) => {
+        this.page1Data = response.asset || [];
+        console.log("page",this.page1Data)
 
 
-    },
-    (error) => {
-      console.error('Error fetching assets:', error);
-    }
-  );
-}
+      },
+      (error) => {
+        console.error('Error fetching assets:', error);
+      }
+    );
+  }
+
 
 }

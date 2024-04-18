@@ -10,45 +10,37 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Display details for each owner in the 'owners' array -->
-        <ng-container *ngFor="let owner of data.owners">
+        <ng-container *ngFor="let owner of data">
           <tr>
-            <!-- Ownership Duration Column -->
             <td>
-              <p>From: {{ owner?.ownershipDurationFrom }}</p>
-              <p>To: {{ owner?.ownershipDurationTo }}</p>
-              <p>Number of Owners: {{ owner?.numOwners }}</p>
+              <p>From: {{ owner.owners.ownershipDurationFrom }}</p>
+              <p>To: {{ owner.owners.ownershipDurationTo }}</p>
+              <!-- <p>Number of Owners: {{ owner?.numOwners }}</p> -->
             </td>
 
-            <!-- Other Details Column -->
             <td>
-              <!-- Display details for each owner in the 'owners' array -->
-              <ng-container *ngFor="let ownerDetails of owner?.owners">
                 <div>
-                  <p>Owner name: {{ ownerDetails?.name }}</p>
+                  <p>Owner name: {{ owner.owners.name }}</p>
+                  <p>Contact Information: {{ owner.owners.contactNumber }}</p>
+                  <p>Address: {{ owner.owners.address }}</p>
 
-                  <p>Contact Information: {{ ownerDetails?.contactInformation }}</p>
-                  <p>Address: {{ ownerDetails?.address }}</p>
-                  <p>Market Value: {{ ownerDetails?.marketPrice }}</p>
-
-                  <p>Consideration Value: {{ ownerDetails?.purchasePrice }}</p>
-                  <p>Date of Transaction: {{ ownerDetails?.dateOfTransaction }}</p>
-                  <p>Transaction Type: {{ ownerDetails?.transactionType }}</p>
-                  <p>Land Usage History: {{ ownerDetails?.landUsageHistory }}</p>
-                  <p>Name of Claimant/Buyer: {{ ownerDetails?.buyerDetails }}</p>
-                  <p>Name of Executant/Seller: {{ ownerDetails?.sellerDetails }}</p>
-                  <p>Boundary Details :</p>
-                  <p>North: {{ ownerDetails?.north }}</p>
-                  <p>South: {{ ownerDetails?.south }}</p>
-                  <p>East: {{ ownerDetails?.east }}</p>
-                  <p>West: {{ ownerDetails?.west }}</p>
+                  <!-- <p>Market Value: {{ owners.marketPrice }}</p> -->
+                  <p>Consideration Value: {{ owner.transaction.purchasePrice }}</p>
+                  <p>Date of Transaction: {{ owner.transaction.dateOftransaction }}</p>
+                  <p>Transaction Type: {{ owner.transaction.transactionType}}</p>
+                  <p>Land Usage History: {{owner.transaction.landUsageHistory  }}</p>
+                  <p>Name of Executant/Seller: {{ owner.transaction.sellerName  }}</p>
+                  <!-- <p>Boundary Details :</p>
+                  <p>North: {{  }}</p>
+                  <p>South: {{  }}</p>
+                  <p>East: {{  }}</p>
+                  <p>West: {{  }}</p> -->
 
 
 
                   <!-- Add a line break between each set of details -->
                   <br>
                 </div>
-              </ng-container>
             </td>
           </tr>
         </ng-container>

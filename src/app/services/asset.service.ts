@@ -164,7 +164,15 @@ getOwnersInfo(){
 }
 
 getOwners(id:any){
-  const url = `${this.CouchURL}/_design/view/_view/ownersInfo?key="${id}"`
+  const url = `${this.CouchURL}/_design/view/_view/info?key="${id}"`
+  return this.http.get(url, {
+    headers: {
+      'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
+    }
+  })
+}
+getTransactionInfo(Id:any){
+  const url = `${this.CouchURL}/_design/view/_view/ownersInfo?key="${Id}"`
   return this.http.get(url, {
     headers: {
       'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)

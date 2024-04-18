@@ -68,7 +68,7 @@ export class ManageAssetFormDialogComponent implements AfterViewInit {
     this.page2Form.patchValue(data);
     this.pageForms.push(this.page1Form);
     this.pageForms.push(this.page2Form);
-    console.log("kkk",this.page2Form.value.owners,this.page2Form.value.owners[0])
+    console.log("kkk",data,data.id)
 
   }
 
@@ -109,17 +109,49 @@ export class ManageAssetFormDialogComponent implements AfterViewInit {
 onSubmitting() {
   const page1=this.page1Form.value;
   console.log("form",page1,this.page1Form.value,this.page2Form.value)
-
+  if(!this.page1Form){
+  this.couchData.docs.push(
+    this.land={
+      _id:"land_2_" + uuidv4(),
+      data:{
+        barcode:page1.barcode,
+        type:"land",
+        createdOn:new Date().toLocaleString('en-GB')
+      }
+    },
+  
+    this.landLocationInfo={
+      _id:"landLocationInfo_2_"+ uuidv4(),
+      data:{
+        landArea: page1.landArea,
+        selectedDistrict: page1.selectedDistrict,
+        selectedTaluk: page1.selectedTaluk,
+        state: page1.state,
+        ward: page1.ward,
+        surveyNumber: page1.surveyNumber,
+        subdivisionNumber: page1.subdivisionNumber,
+        ownership: page1.ownership,
+        landUseType: page1.landUseType,
+        type:"landLocationInfo",
+        land: this.land._id,
+        createdOn:new Date().toLocaleString('en-GB')
+      }
+    },
+   
+  )
+}
+   
   let owners:any=this.page2Form.value.owners
   for(let owner of owners){
     this.ownerData={
       _id:"ownersInfo_2_" + uuidv4(),
       data:{
-        ownershipDurationFrom: owners.ownershipDurationFrom,
-        ownershipDurationTo: owners.ownershipDurationTo,
+        ownershipDurationFrom: owner.ownershipDurationFrom,
+        ownershipDurationTo: owner.ownershipDurationTo,
         name: owner.name,
         contactNumber: owner.contactInformation,
-        address:owner.address,         
+        address:owner.address,   
+        land: this.page1Form? this.data.id :this.land._id ,      
         type:"ownersInfo",
         createdOn:new Date().toLocaleString('en-GB')
       }
@@ -144,37 +176,7 @@ onSubmitting() {
     console.log("DOCc",this.doc)
     console.log("couchdata",this.couchData)
 }
-  this.couchData.docs.push(
-    this.land={
-      _id:"land_2_" + uuidv4(),
-      data:{
-        barcode:page1.barcode,
-        type:"land",
-        ownersInfo:this.ownerData._id,
-        createdOn:new Date().toLocaleString('en-GB')
-      }
-    },
   
-    this.landLocationInfo={
-      _id:"landLocationInfo_2_"+ uuidv4(),
-      data:{
-        landArea: page1.landArea,
-        selectedDistrict: page1.selectedDistrict,
-        selectedTaluk: page1.selectedTaluk,
-        state: page1.state,
-        ward: page1.ward,
-        surveyNumber: page1.surveyNumber,
-        subdivisionNumber: page1.subdivisionNumber,
-        ownership: page1.ownership,
-        landUseType: page1.landUseType,
-        type:"landLocationInfo",
-        land: this.land._id,
-        createdOn:new Date().toLocaleString('en-GB')
-      }
-    },
-   
-  )
-   
     
     console.log("couchdata",this.couchData)
 

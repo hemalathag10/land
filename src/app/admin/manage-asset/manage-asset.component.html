@@ -39,13 +39,13 @@
  
 <br>
   <div class="table-responsive">
-    <div id="demo" *ngIf="page1Data.length > 0"> 
+    <div id="demo" *ngIf="assetDoc.length > 0"> 
       <angular-slickgrid  gridId="grid1" [columnDefinitions]="columnDefinitions" 
         [gridOptions]="gridOptions" [dataset]="dataset"  
         ></angular-slickgrid>
     </div>
     
-    <div *ngIf="page1Data.length === 0"> 
+    <div *ngIf="assetDoc.length === 0"> 
       No data available.
     </div>
   </div>

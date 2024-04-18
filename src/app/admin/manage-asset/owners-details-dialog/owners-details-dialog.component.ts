@@ -11,7 +11,10 @@ export class OwnersDetailsDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<OwnersDetailsDialogComponent>
-  ) { }
+  ) { 
+    console.log("data",data)
+
+  }
 
   closeDialog(): void {
     this.dialogRef.close();
