@@ -7,7 +7,7 @@ import { BehaviorSubject,  Subject  } from 'rxjs';
   providedIn: 'root',
 })
 export class SharedService {
-  public _fetchedData: any; // Change 'any' to the actual type of your data
+  public _fetchedData: any; 
   private decodedTextSubject = new Subject<string>();
   decodedText$ = this.decodedTextSubject.asObservable();
 
@@ -27,7 +27,6 @@ export class SharedService {
   userLoggedIn$ = this.userLoggedInSubject.asObservable();
 
   constructor() {
-    // Initialize with default values
     this.showScanningSectionSubject.next(false);
     this.userLoggedInSubject.next(false);
   }

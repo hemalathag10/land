@@ -1,27 +1,76 @@
-# Land
+<h2>Land Asset Tracking and Management Project</h2>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.9.
+<hr>
+<bold>About:</bold><br>
+The "Land Asset Tracking and Management System" employs barcode scanning to provide instant access to the past 50 years of land ownership details upon scanning the barcode of landpaper and manages the land records in more efficient way.
+<hr>
 
-## Development server
+<span style="color:blue">**Modules:-**</span><br>
+<span style="color:red">**Admin**</span><br>
+<span>&#9745;</span> Admin add the land asset<br>
+<span>&#9745;</span> View and maintaining land records<br>
+<span>&#9745;</span> Admin Update new owners of land<br>
+<span>&#9745;</span> Admin maintaining user records<br>
+<br>
+<span style="color:red">**User**</span><br>
+<span>&#9745;</span> User Registration and login<br>
+<span>&#9745;</span> Tracking land asset using barcode scanning<br>
+<span>&#9745;</span> User can Download land plot map  <br>
+<span>&#9745;</span> Predict the future land price using past year land prices  <br>
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+<br>
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+<span style="color:blue">**Admin:-**</span><br>
+<span>&#10004;</span> Admin Login.<br>
+<span>&#10004;</span> Dashboard Overview.<br>
+<span>&#10004;</span> Manage Asset.<br
+<span>&#10004;</span> Manage User.<br>
+<span>&#10004;</span> Reports & Analytics.<br>
 
-## Build
+<span style="color:blue">**User:-**</span><br>
+<span>&#10004;</span> User Login.<br>
+<span>&#10004;</span> Barcode Scanning.<br>
+<span>&#10004;</span> Land Records <br>
+<span>&#10004;</span> Land Price Prediction.<br>
+<span>&#10004;</span> View Map.<br>
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Technologies used:-
+1. Front-End Development:
+- Html 5.
+- CSS.
+- Javascript.
+-Angular
 
-## Further help
+2. Back-End Development:
+- Angular
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+3. Database:
+- Couch db
+
+### ================ Software And Tools Required ================
+- VS code editor
+- couch db
+
+
+
+
+### =================Land Assset Tracking and Management System Features  =================
+<span style="color:blue">**Barcode Scanning :**</span><br>
+       A Land asset trackingg and management system enables an user to scan their land asset barcode in the barcode scanner (using system camera itself).
+       One of the reasons why the land asset tracking and management system is important because it helps user can easily view their land related data, historical ownership details, land plot map and also future year land price.<br>
+<span style="color:blue">**Asset Management:**</span><br>
+      Asset Management can easily manage the land assets by using unique barcode . so, can easily fetch land data by using barcode itself.<br>
+<span style="color:blue">**Land Price Prediction:**</span><br>
+     Land Price prediction is unique feature of this project. It predict the current and future 3 years land price by using past years land price trends.<br>
+<span style="color:blue">**Graphical Analytics:**</span><br>
+     Graphical Analytics feature showcase the land use type in piechart format and visualizing the trends of past year land prices.
+<br><a href="">   System  User Manual</a><br>
+<a href="">   System  PPT</a>
+
+
+

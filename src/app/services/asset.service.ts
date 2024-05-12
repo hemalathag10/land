@@ -16,7 +16,7 @@ export class AssetService {
   databaseName: string = 'land';
   couchUserName: string = 'd_couchdb';
   couchPassword: string = 'Welcome#2';
-
+  asset:any[]=[]
 
 
   constructor(private http: HttpClient) {}
@@ -97,7 +97,6 @@ if (indexToUpdate !== -1) {
       previousOwners.ownershipDurationTo = ownershipFromDate.toISOString().split('T')[0];
 
     }
-    console.log("after",previousOwners)
     ownersArray.push(formData);
     console.log('Updated ownersArray:', ownersArray);
   } else {
@@ -153,51 +152,162 @@ console.log(headers)
     return this.http.get<any>(`${this.baseUrl}/doc_asset`, { headers });
   }
 
+  
+
+getInfo(): Observable<any> {
+  const url = `${this.CouchURL}/_design/view/_view/landSearch`;
+  return this.http.get(url, {
+    headers: {
+      'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
+    }
+  }).pipe(
+    map((response: any) => {
+      return response.rows.map((eachLand: any) => ({
+        barcode: eachLand.value.data.barcode
+        
+      }),
+      
+
+    );
+    })
+  );
+}
+
+async getLandDetails() {
+  const url = `${this.CouchURL}/_design/view/_view/landSearch`
+  const data=this.http.get(url, {
+    headers: {
+      'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
+    }
+  })
+  data.subscribe((response:any)=>{
+    response.rows.map((eachLand:any,index:number)=>{
+      this.getInfo().subscribe((res: any) => {
+        this.asset=res
+
+        this.getOwners(eachLand.id,index)
+        this.getLocation(eachLand.id,index)
+        console.log(this.asset)
+
+      });         
  
+     
+    })
+
+
+  });
+this.getAssetss()
+  return this.asset
+ 
+}
+
+
+
+getAssetss(){
+  console.log(this.asset)
+  
+}
+
+
+
+
 getOwnersInfo(){
   const url = `${this.CouchURL}/_design/view/_view/landSearch`
-  return this.http.get(url, {
+  const data=this.http.get(url, {
     headers: {
       'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
     }
   })
+  data.subscribe((response:any)=>{
+    response.rows.map((eachLand:any,index:number)=>{
+      this.getInfo().subscribe((res: any) => {
+        this.asset=res
+
+        this.getOwners(eachLand.id,index)
+        this.getLocation(eachLand.id,index)
+        console.log(this.asset)
+
+      });         
+ 
+     
+    })
+
+
+  });
+this.getAssetss()
+  return data
+  
 }
 
-getOwners(id:any){
+getOwners(id:any, index?:number){
+
   const url = `${this.CouchURL}/_design/view/_view/info?key="${id}"`
-  return this.http.get(url, {
+  const ownersData=this.http.get(url, {
     headers: {
       'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
     }
   })
+
+  ownersData.subscribe((response:any)=>{
+
+    response.rows.map((eachOwner:any,index:number)=>{
+      let owner=eachOwner.value.data
+      if(index!=undefined){
+        this.asset[index].owner=owner
+        // this.getAssetss()
+
+      }
+      this.getTransactionInfo(eachOwner.id,index)
+
+    })
+  })
+  return ownersData
 }
-getTransactionInfo(Id:any){
+
+getTransactionInfo(Id:any,index?:number){
   const url = `${this.CouchURL}/_design/view/_view/ownersInfo?key="${Id}"`
-  return this.http.get(url, {
+  const transactionData=this.http.get(url, {
     headers: {
       'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
     }
   })
+
+  transactionData.subscribe((response:any)=>{
+
+    response.rows.map((eachTransaction:any)=>{
+      let trans=eachTransaction.value.data
+      if(index!=undefined){
+        this.asset[index].transaction=trans
+        // this.getAssetss()
+
+      }
+    })
+  })
+  return transactionData
 }
 
-getLocation(landId:any){
+getLocation(landId:any,index?:number){
   const url = `${this.CouchURL}/_design/view/_view/locationSearch?key="${landId}"`
-  return this.http.get(url, {
+  let LocationData=this.http.get(url, {
     headers: {
       'Authorization': 'Basic ' + btoa(this.couchUserName + ':' + this.couchPassword)
     }
   })
+  LocationData.subscribe((response:any)=>{
+
+    response.rows.map((location:any)=>{
+      if(index!=undefined){
+      this.asset[index].location=location.value.data
+
+      }
+    })
+  })
+
+  return LocationData
 }
 
 
-  getAllUsers(): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Basic ' + btoa(this.credentials)
-    });
-console.log("user",headers)
-    return this.http.get<any>(`${this.baseUrl}/form`, { headers });
-  }
+
 
   getLandRecordByDetails(district: string, taluk: string, surveyNumber: string, subdivisionNumber:string): Observable<any> {
     const url = `${this.baseUrl}/doc_asset`;

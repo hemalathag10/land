@@ -22,16 +22,12 @@ const routes: Routes = [
   {path:'home',component:homeComponent},
   {path:'map-display',component:MapDisplayComponent},
   {path:'land-price',component:LandPriceComponent},
-
-
-
-
-  { path: '', redirectTo: '/nav-bar', pathMatch: 'full' },
+ { path: '', redirectTo: '/nav-bar', pathMatch: 'full' },
 
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
 export class UserRoutingModule { }

@@ -37,7 +37,7 @@ export class ManageUserComponent implements OnInit {
         this.dataset = this.users.map((registration, index) => ({
           id: index + 1,
           email: registration.value.data.emailId,
-          createdAt: this.formatDate(registration.value.data.createdOn, false)
+          createdAt: registration.value.data.createdOn
           // lastLogin: this.formatDate(registration.value.data.lastLogin, true)
         }));
         

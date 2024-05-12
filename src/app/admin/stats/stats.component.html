@@ -103,14 +103,14 @@
   <br>
     <div class="table-responsive">
       
-  <div id="demo" *ngIf="recentRegistrationsData.length > 0">
+  <div id="demo" *ngIf="recent.length > 0">
     <angular-slickgrid  gridId="grid11" [columnDefinitions]="columnDefinitions" 
       [gridOptions]="gridOptions" [dataset]="dataset"  
       (onAngularGridCreated)="angularGridReady($event)"
       ></angular-slickgrid>
   </div>
   
-  <div *ngIf="recentRegistrationsData.length === 0"> <!-- Show a message when there's no data -->
+  <div *ngIf="recent.length === 0"> 
     No data available.
   </div>
     </div>

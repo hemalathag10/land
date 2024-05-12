@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AssetService } from 'src/app/services/asset.service';
+import { DataService } from 'src/app/services/data.service';
+import { AuthService } from 'src/app/services/auth.service';
 import {
   AngularGridInstance,
   FieldType,
@@ -24,58 +26,101 @@ export class StatsComponent implements OnInit {
   dataset: any[] = [];
   angularGrid!: AngularGridInstance;
   districts: string[] = ['Ariyalur', 'Chennai', 'Madurai'];
-
-  
+  recentAssetArray:any[]=[]
+  recent:any[]=[]
+  recentArrayLength:number=0
   searchQuery: any ;
   searchQueryLower:any;
   selectedFilterType: string = 'District';
   filteredDataset: any[] = [];
   fieldValueString:any;
 
-  constructor(private assetService: AssetService) {}
+  constructor(private assetService: AssetService, private dataService:DataService,
+    private authService:AuthService
+  ) {}
   
   ngOnInit() {
     
     this.processData()
   }
-  processData(){
-    this.assetService.getAllAssets().subscribe((response: any) => {
-      const assetsArrays: any[][] = response.asset || [];
-      console.log("response", response);
-      this.totalAssets = assetsArrays.length;
-      const today = new Date().toISOString().split('T')[0];
-      this.newAssetsToday = assetsArrays.filter(assetArray =>
-        assetArray.some(asset =>
-          asset.created_at && asset.created_at.split('T')[0] === today
-        )
-      ).length;
-
-      const last7Days = new Date();
-      last7Days.setDate(last7Days.getDate() - 7);
-
-      this.recentRegistrationsData = assetsArrays
-        .flatMap(assetArray => assetArray.filter(asset =>
-          asset.created_at && new Date(asset.created_at) > last7Days
-        ));
-
-      console.log('Recent Registrations Data:', this.recentRegistrationsData);
-
-      this.recentRegistrations = this.recentRegistrationsData.length;
-      this.dataTable()
-      
-     
+  landSearch(allLand: any[]) {
+    const promises = allLand.map(land => {
+      let landId = land.value._id;
+      return this.locationSearch(landId);
     });
+  
+    Promise.all(promises).then(() => {
+      this.recentRegistrations = this.recent.length;
+      console.log("ppp", this.recent);
+      this.recentRegistrationsData=this.recent
+      console.log("table",this.recentRegistrationsData)
 
-    this.assetService.getAllUsers().subscribe((response: any) => {
-      const users: any[] = response.user || [];
+      console.log('Recent Data:', this.recent);
+    }).catch(error => {
+      console.error('Error:', error);
+    });
+  }
+  
+  locationSearch(landId: any): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.assetService.getLocation(landId).subscribe((location: any) => {
+        let asset = location.rows[0].value.data;
+        this.recentAssetArray.push(asset);
+        this.recentArrayLength+=1
+  
+        const last7Days = new Date();
+        last7Days.setDate(last7Days.getDate() - 7);
+  
+        let d = parseInt(asset.createdOn.slice(0, 2), 10);
+        let m = parseInt(asset.createdOn.slice(3, 5), 10) - 1;
+        let y = parseInt(asset.createdOn.slice(6, 10), 10);
+        let fulldate = new Date(y, m, d);
+  
+        if (fulldate > last7Days) {
+          this.recent.push(asset);
+          this.dataTable()
 
-      console.log(users.length);
+        }
+        if((asset.createdOn.slice(0,10)) === (new Date().toLocaleString('en-GB').slice(0,10))){
+          this.newAssetsToday+=1
+        }
+        
+        resolve();
+      }, error => {
+        console.error('Error fetching location:', error);
+        reject(error);
+      });
+    });
+  }
+  
+  processData(){
+    this.assetService.getOwnersInfo().subscribe((allLand:any)=>{
+      console.log("land",allLand)
+      this.landSearch(allLand.rows)
+      this.totalAssets=allLand.rows.length
+      console.log("ttt",this.recent)
+      
+  
+})
+
+
+
+    this.authService.getAllUsers().subscribe((response: any) => {
+      const users: any[] = response.rows || [];
+
       this.totalUsers = users.length;
-      const today = new Date().toISOString().split('T')[0];
 
-      this.newUsersToday = users.filter(user =>
-        user.createdAt && user.createdAt.split('T')[0] === today
-      ).length;
+      users.map((user:any) =>{
+   
+        let fulldate = user.key.createdOn
+        let today=new Date().toLocaleString('en-GB').slice(0,10)
+        console.log(user.key.createdOn,today)
+
+        if(fulldate === today){
+          this.newUsersToday+=1
+        }
+      }
+      )
 
       console.log(this.newUsersToday);
     });
@@ -85,7 +130,6 @@ export class StatsComponent implements OnInit {
   dataTable(){
     this.columnDefinitions = [
       { id: 'id', name: 'S.No', field: 'id', sortable: true, maxWidth: 90 ,  filterable: true, filter: { model: Filters.compoundInputNumber }},
-      { id: 'Date', name: 'Date', field: 'Date', sortable: true, maxWidth: 120,formatter: Formatters.dateIso,      type: FieldType.date, filterable: true, filter: { model: Filters.compoundDate }},
       { id: 'landArea', name: 'Land Area', field: 'landArea', sortable: true, maxWidth: 90, filterable: true, filter: { model: Filters.compoundInputNumber} },
       { id: 'State', name: 'State', field: 'State', sortable: true, maxWidth: 110, filterable: true, filter: { model: Filters.compoundInputText } },
       { id: 'District', name: 'District', field: 'District', sortable: true,maxWidth: 120,filterable:true, filter: { model: Filters.compoundInputText } },
@@ -97,10 +141,8 @@ export class StatsComponent implements OnInit {
       { id: 'LandUseType', name: 'Land Use Type', field: 'LandUseType', sortable: true, maxWidth: 150, filterable: true,filter: { model: Filters.compoundInputNumber}},
     ];
 
-
-      this.dataset = this.recentRegistrationsData.reverse().map((registration, index) => ({
+      this.dataset = this.recent.reverse().map((registration, index) => ({
       id: index + 1,
-      Date: registration.owners[registration.owners.length - 1].ownershipDurationFrom,
       landArea: registration.landArea,
       State: registration.state,
       District:registration.selectedDistrict,
@@ -115,7 +157,6 @@ export class StatsComponent implements OnInit {
 
     
    
-    // Set grid options
     this.gridOptions = {
       enableAutoResize: true,
       enableCellNavigation: true,
@@ -153,7 +194,6 @@ export class StatsComponent implements OnInit {
         
       });
     } 
-    // Update the dataset used by SlickGrid to the filtered dataset
     this.recentRegistrationsData=this.filteredDataset
     this.dataTable()
     console.log("aa",this.filteredDataset)

@@ -21,7 +21,7 @@ export class ReportsAnalyticsComponent implements OnInit {
   selectedDistrict: string = '';
   selectedDistrictOption:string="";
   selectedTalukOption:string="";
-
+assets:any[]=[]
   selectedTaluk: string = '';
   filteredDistricts: string[] = [];
   filteredTaluks: string[] = [];
@@ -55,8 +55,18 @@ doc:any;
     constructor(private assetService: AssetService) { }
 
   ngOnInit() {
+    this.assetService.getLandDetails()
+    setTimeout(() => {
+      console.log("service",this.assetService.asset)
+      this.assetData=this.assetService.asset
+      this.drawPieChart();
+      this.drawDoughnutChart();
+
+
+    }, 2000);
+   
     
-    console.log("taluks",this.taluks)
+    console.log("taluks",this.taluks,)
 
     this.fetchAssetData();
 
@@ -76,19 +86,10 @@ doc:any;
  
   
   private fetchAssetData() {
-    this.assetService.getAllAssets().subscribe(
-      (data) => {
-        this.assetData = data;
-        this.drawDoughnutChart();
-        this.drawPieChart();
+   
+
         
-      
-        
-      },
-      (error) => {
-        console.error('Error fetching asset data:', error);
-      }
-    );
+     
   }
 
 
@@ -226,12 +227,11 @@ private drawLineChart() {
   private extractLandValueFromDatabase(searchDistrict: string, searchTaluk: string): { [key: number]: number[] }{
     const landValueRange: { [key: number]: number[] } = {};
   
-    if (this.assetData ?.asset) {
-      this.assetData.asset.forEach((landArray: any[]) => {
-        landArray.forEach((land: any) => {
+    if (this.assetData) {
+        this.assetData.map((land: any) => {
 
-          if (land.selectedDistrict == searchDistrict && land.selectedTaluk == searchTaluk) {
-            land.owners.forEach((owner: any) => {
+          if (land.location.selectedDistrict == searchDistrict && land.selectedTaluk == searchTaluk) {
+            land.owner.forEach((owner: any) => {
               const ownershipDurationFrom = owner.ownershipDurationFrom;
   
               if (ownershipDurationFrom) {
@@ -245,7 +245,6 @@ private drawLineChart() {
               } else {
                   this.wards[land.ward] = [{ year:year,price:Math.floor (purchasePrice / landArea) }];
               }
-console.log("www",this.wards)
 
   
                 if (!isNaN(year) && !isNaN(purchasePrice)) {
@@ -261,7 +260,7 @@ console.log("www",this.wards)
             });
           }
         });
-      });
+      
     }
   
   console.log("landvalue",landValueRange)
@@ -333,6 +332,7 @@ console.log(landUseTypeCount)
   private drawPieChart() {
     const ctx = document.getElementById('pieChart') as HTMLCanvasElement;
     const ownership = this.extractOwnershipFromDatabase();
+    console.log("types",ownership)
     const ownershipTypeCount: { [key: string]: number }  = {
       'Government': 0,
       'Mitta': 0,
@@ -375,13 +375,13 @@ console.log(landUseTypeCount)
 
   private extractLandUseTypesFromDatabase(): string[] {
     const landUseTypes: string[] = [];
-  
-    if (this.assetData ?.asset) {
-      this.assetData.asset.forEach((landArray: any[]) => { 
-        landArray.forEach((land: any) => { 
-          landUseTypes.push(land.landUseType);
-        });
-      });
+   console.log("ownership",this.assetData)
+    if (this.assetData) {
+      console.log("assetdata",this.assetData)
+      this.assetData.map((res:any)=>{
+        landUseTypes.push(res.location.landUseType)
+      })
+      
     }
   
     return landUseTypes;
@@ -401,13 +401,12 @@ console.log(landUseTypeCount)
 
   private extractOwnershipFromDatabase(): string[] {
     const ownershipTypes: string[] = [];
-  
-    if (this.assetData ?.asset) {
-      this.assetData.asset.forEach((ownershipArray: any[]) => { 
-        ownershipArray.forEach((owner: any) => { 
-          ownershipTypes.push(owner.ownership);
-        });
-      });
+    if (this.assetData) {
+      this.assetData.map((res:any)=>{
+        ownershipTypes.push(res.location.ownership)
+      })
+
+     
     }
   
     return ownershipTypes;

@@ -89,7 +89,6 @@ export class landRecordsComponent {
         }
       );
     } else {
-      // Fetch data by taluk, district, and survey number
       console.log(this.subdivisionNumber)
       this.assetService.getLandRecordByDetails(this.district, this.taluk, this.surveyNumber,this.subdivisionNumber).subscribe(
         (data: any) => {
@@ -97,7 +96,10 @@ export class landRecordsComponent {
           if(data){
           this.dataService.setData(data);
           console.log('Fetched Data by Details:', data);
-          this.router.navigate(['/page']);}
+
+          this.router.navigate(['/page']);
+        }
+          
           else{
             alert("Data not found!!!")
           }
