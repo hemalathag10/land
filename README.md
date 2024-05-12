@@ -8,70 +8,57 @@ The "Land Asset Tracking and Management System" employs barcode scanning to prov
 <span style="color:blue">**Modules:-**</span><br>
 <p><span style="color:blue">**Admin:-**</span></p>
 <ul>
-    <li><span>&#10004;</span> Admin Login.
+    <span>&#10004;</span> Admin Login.
         <ul>
-            <li>Secure authentication mechanism with role-based access control.</li>
-            <li>Password recovery/reset feature for enhanced security.</li>
+            <li>Secure authentication mechanism with admin credentials.</li>
         </ul>
-    </li>
     <li><span>&#10004;</span> Dashboard Overview.
         <ul>
             <li>Real-time graphical representation of land asset distribution.</li>
             <li>Quick access to key metrics and summaries for efficient decision-making.</li>
         </ul>
     </li>
-    <li><span>&#10004;</span> Manage Asset.
+    <span>&#10004;</span> Manage Asset.
         <ul>
             <li>CRUD (Create, Read, Update, Delete) operations for land assets with barcode integration.</li>
-            <li>Bulk import/export functionality for streamlined data management.</li>
         </ul>
-    </li>
-    <li><span>&#10004;</span> Manage User.
+    <span>&#10004;</span> Manage User.
         <ul>
-            <li>User management interface with options for adding, modifying, and removing user accounts.</li>
-            <li>User activity logs for audit trail and monitoring purposes.</li>
+            <li>User management interface with user credentials.</li>
         </ul>
-    </li>
-    <li><span>&#10004;</span> Reports & Analytics.
+    <span>&#10004;</span> Reports & Analytics.
         <ul>
             <li>Customizable reporting tools for generating comprehensive land asset reports.</li>
-            <li>Advanced analytics dashboard with trend analysis and forecasting capabilities.</li>
         </ul>
-    </li>
 </ul>
 
 <p><span style="color:blue">**User:-**</span></p>
 <ul>
-    <li><span>&#10004;</span> User Login.
+    <span>&#10004;</span> User Login.
         <ul>
             <li>Seamless login experience with remember me functionality.</li>
             <li>Multi-factor authentication for enhanced security.</li>
         </ul>
-    </li>
-    <li><span>&#10004;</span> Barcode Scanning.
+    <span>&#10004;</span> Barcode Scanning.
         <ul>
             <li>Intuitive barcode scanning interface with real-time feedback.</li>
             <li>Error handling mechanisms for invalid or unreadable barcodes.</li>
         </ul>
-    </li>
-    <li><span>&#10004;</span> Land Records.
+    <span>&#10004;</span> Land Records.
         <ul>
             <li>Access to detailed land ownership history and related documentation.</li>
             <li>Filtering and search options for efficiently retrieving specific land records.</li>
         </ul>
-    </li>
-    <li><span>&#10004;</span> Land Price Prediction.
+    <span>&#10004;</span> Land Price Prediction.
         <ul>
             <li>Automated prediction models based on historical land price data.</li>
             <li>Visualization of predicted land prices for informed decision-making.</li>
         </ul>
-    </li>
-    <li><span>&#10004;</span> View Map.
+    <span>&#10004;</span> View Map.
         <ul>
             <li>Integration with mapping services for visual representation of land assets.</li>
             <li>Interactive map features for exploring land boundaries and geographical context.</li>
         </ul>
-    </li>
 </ul>
 
 
@@ -96,7 +83,7 @@ The "Land Asset Tracking and Management System" employs barcode scanning to prov
 
 
 
-### =================Land Assset Tracking and Management System Features  =================
+### Land Assset Tracking and Management System Features 
 <span style="color:blue">**Barcode Scanning :**</span><br>
        A Land asset trackingg and management system enables an user to scan their land asset barcode in the barcode scanner (using system camera itself).
        One of the reasons why the land asset tracking and management system is important because it helps user can easily view their land related data, historical ownership details, land plot map and also future year land price.<br>
