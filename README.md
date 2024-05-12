@@ -6,36 +6,73 @@ The "Land Asset Tracking and Management System" employs barcode scanning to prov
 <hr>
 
 <span style="color:blue">**Modules:-**</span><br>
-<span style="color:red">**Admin**</span><br>
-<span>&#9745;</span> Admin add the land asset<br>
-<span>&#9745;</span> View and maintaining land records<br>
-<span>&#9745;</span> Admin Update new owners of land<br>
-<span>&#9745;</span> Admin maintaining user records<br>
-<br>
-<span style="color:red">**User**</span><br>
-<span>&#9745;</span> User Registration and login<br>
-<span>&#9745;</span> Tracking land asset using barcode scanning<br>
-<span>&#9745;</span> User can Download land plot map  <br>
-<span>&#9745;</span> Predict the future land price using past year land prices  <br>
+<p><span style="color:blue">**Admin:-**</span></p>
+<ul>
+    <li><span>&#10004;</span> Admin Login.
+        <ul>
+            <li>Secure authentication mechanism with role-based access control.</li>
+            <li>Password recovery/reset feature for enhanced security.</li>
+        </ul>
+    </li>
+    <li><span>&#10004;</span> Dashboard Overview.
+        <ul>
+            <li>Real-time graphical representation of land asset distribution.</li>
+            <li>Quick access to key metrics and summaries for efficient decision-making.</li>
+        </ul>
+    </li>
+    <li><span>&#10004;</span> Manage Asset.
+        <ul>
+            <li>CRUD (Create, Read, Update, Delete) operations for land assets with barcode integration.</li>
+            <li>Bulk import/export functionality for streamlined data management.</li>
+        </ul>
+    </li>
+    <li><span>&#10004;</span> Manage User.
+        <ul>
+            <li>User management interface with options for adding, modifying, and removing user accounts.</li>
+            <li>User activity logs for audit trail and monitoring purposes.</li>
+        </ul>
+    </li>
+    <li><span>&#10004;</span> Reports & Analytics.
+        <ul>
+            <li>Customizable reporting tools for generating comprehensive land asset reports.</li>
+            <li>Advanced analytics dashboard with trend analysis and forecasting capabilities.</li>
+        </ul>
+    </li>
+</ul>
 
-<br>
-
-
-<span style="color:blue">**Admin:-**</span><br>
-<span>&#10004;</span> Admin Login.<br>
-<span>&#10004;</span> Dashboard Overview.<br>
-<span>&#10004;</span> Manage Asset.<br
-<span>&#10004;</span> Manage User.<br>
-<span>&#10004;</span> Reports & Analytics.<br>
-
-<span style="color:blue">**User:-**</span><br>
-<span>&#10004;</span> User Login.<br>
-<span>&#10004;</span> Barcode Scanning.<br>
-<span>&#10004;</span> Land Records <br>
-<span>&#10004;</span> Land Price Prediction.<br>
-<span>&#10004;</span> View Map.<br>
-
-
+<p><span style="color:blue">**User:-**</span></p>
+<ul>
+    <li><span>&#10004;</span> User Login.
+        <ul>
+            <li>Seamless login experience with remember me functionality.</li>
+            <li>Multi-factor authentication for enhanced security.</li>
+        </ul>
+    </li>
+    <li><span>&#10004;</span> Barcode Scanning.
+        <ul>
+            <li>Intuitive barcode scanning interface with real-time feedback.</li>
+            <li>Error handling mechanisms for invalid or unreadable barcodes.</li>
+        </ul>
+    </li>
+    <li><span>&#10004;</span> Land Records.
+        <ul>
+            <li>Access to detailed land ownership history and related documentation.</li>
+            <li>Filtering and search options for efficiently retrieving specific land records.</li>
+        </ul>
+    </li>
+    <li><span>&#10004;</span> Land Price Prediction.
+        <ul>
+            <li>Automated prediction models based on historical land price data.</li>
+            <li>Visualization of predicted land prices for informed decision-making.</li>
+        </ul>
+    </li>
+    <li><span>&#10004;</span> View Map.
+        <ul>
+            <li>Integration with mapping services for visual representation of land assets.</li>
+            <li>Interactive map features for exploring land boundaries and geographical context.</li>
+        </ul>
+    </li>
+</ul>
 
 
 
