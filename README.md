@@ -12,12 +12,11 @@ The "Land Asset Tracking and Management System" employs barcode scanning to prov
         <ul>
             <li>Secure authentication mechanism with admin credentials.</li>
         </ul>
-    <li><span>&#10004;</span> Dashboard Overview.
+    <span>&#10004;</span> Dashboard Overview.
         <ul>
             <li>Real-time graphical representation of land asset distribution.</li>
             <li>Quick access to key metrics and summaries for efficient decision-making.</li>
         </ul>
-    </li>
     <span>&#10004;</span> Manage Asset.
         <ul>
             <li>CRUD (Create, Read, Update, Delete) operations for land assets with barcode integration.</li>
@@ -93,8 +92,7 @@ The "Land Asset Tracking and Management System" employs barcode scanning to prov
      Land Price prediction is unique feature of this project. It predict the current and future 3 years land price by using past years land price trends.<br>
 <span style="color:blue">**Graphical Analytics:**</span><br>
      Graphical Analytics feature showcase the land use type in piechart format and visualizing the trends of past year land prices.
-<br><a href="">   System  User Manual</a><br>
-<a href="">   System  PPT</a>
+
 
 
 
